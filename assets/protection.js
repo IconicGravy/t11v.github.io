@@ -1,4 +1,4 @@
-
+// Code explained to help developers contribute and to help skids understand what they're skidding.
 
 // --- Protect Images --- //
 
@@ -76,3 +76,4 @@ setInterval(function () {
         document.body.innerHTML = "<h1>Developer tools are disabled.</h1>";
     }
 }, 500);
+
