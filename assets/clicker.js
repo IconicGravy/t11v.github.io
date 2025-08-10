@@ -2,7 +2,7 @@
 const targetLinks = {
     link1: "https://discordapp.com/users/1091592149105135686",
     link2: "https://www.instagram.com/ironic.gravy/",
-    link3: "https://files.t11v.icu/photos/absolute-cinema-v0-d2wig7n6p5be1.png"
+    link3: "https://www.t11v.icu/dropper/absolute-cinema-v0-d2wig7n6p5be1.png"
 };
 
 // Add click event for each link
@@ -13,4 +13,5 @@ const linkEl = document.getElementById(id);
         event.preventDefault(); // prevent default anchor behavior
         window.open(targetLinks[id], "_blank"); // redirect
     });
+
 });
