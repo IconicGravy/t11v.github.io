@@ -798,6 +798,7 @@ background-color: rgba(8, 8, 8, 0.7); /* lower opacity for glassy look */
      box-shadow: 0rem 0rem 1.25rem 0rem rgba(0, 0, 0, 0.769);
      transition: transform 0.25s ease, z-index 0.25s ease;
 }
+/* didnt have time to add this :P */
 .volume-control {
   display: flex;
   align-items: center;
@@ -823,9 +824,8 @@ background-color: rgba(8, 8, 8, 0.7); /* lower opacity for glassy look */
   filter: drop-shadow(0 0 6px #ff4444);
 }
 
-/* Slider styling */
+/*  */
 .volume-control input[type=range] {
-  -webkit-appearance: none;
   width: 100px;
   height: 4px;
   border-radius: 4px;
@@ -851,7 +851,6 @@ background-color: rgba(8, 8, 8, 0.7); /* lower opacity for glassy look */
   cursor: pointer;
   box-shadow: 0 0 10px #fff;
 }
-
  .image.style1 .frame:hover {
      transform: scale(1.1125);
      z-index: 1;
