@@ -1,14 +1,11 @@
-// ❄️ Layered Snow Effect with Smooth Color Transition
 const canvas = document.getElementById("snow");
 const ctx = canvas.getContext("2d");
 let w, h, snowflakes = [];
 
-// 🌈 Color transition vars
 let snowColor = { r: 255, g: 255, b: 255 };  // start white
 let targetColor = { r: 255, g: 255, b: 255 };
-let transitionSpeed = 0.05; // smaller = slower fade
+let transitionSpeed = 0.05; // fading effect (not added)
 
-// 🎨 Helper: hex → RGB
 function hexToRgb(hex) {
   const bigint = parseInt(hex.slice(1), 16);
   return {
@@ -18,12 +15,10 @@ function hexToRgb(hex) {
   };
 }
 
-// 🎨 Allow external update from color picker
 window.updateSnowColor = function(color) {
   targetColor = hexToRgb(color);
 };
 
-// Resize handling
 function resize() {
   w = canvas.width = window.innerWidth;
   h = canvas.height = window.innerHeight;
@@ -31,7 +26,6 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-// Snowflake factory
 function createSnowflakes(count, sizeRange, speedRange) {
   const flakes = [];
   for (let i = 0; i < count; i++) {
@@ -72,7 +66,7 @@ function drawSnowflake(s) {
   ctx.beginPath();
   ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
 
-  // 🌈 Smooth transition toward targetColor
+  // Smooth transitions (not added)
   snowColor.r += (targetColor.r - snowColor.r) * transitionSpeed;
   snowColor.g += (targetColor.g - snowColor.g) * transitionSpeed;
   snowColor.b += (targetColor.b - snowColor.b) * transitionSpeed;
@@ -92,3 +86,4 @@ function loop() {
 
 initSnow();
 loop();
+
