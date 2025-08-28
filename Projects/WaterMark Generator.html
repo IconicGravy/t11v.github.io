@@ -1,0 +1,526 @@
+<!-- Old project enjoy skidding :P -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Watermark Studio - The 11 View</title>
+  <style>
+    :root{
+      --bg:#0a0a0a;          
+      --panel:#111;          
+      --muted:#1a1a1a;       
+      --ink:#eaeaea;         
+      --ink-dim:#a9a9a9;     
+      --accent:#6ee7ff;      
+      --accent-2:#9b8cff;    
+      --good:#7cffb4;        
+      --danger:#ff6b6b;  
+      --radius:16px;
+      --radius-lg:24px;
+      --shadow-1: 0 1px 2px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.45);
+      --shadow-2: 0 4px 12px rgba(0,0,0,.55), 0 20px 48px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1200px 800px at 80% -10%, #151515 0%, #0b0b0b 45%, #050505 100%), var(--bg);
+      color:var(--ink); font:15px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      letter-spacing:.2px;
+    }
+    .wrap{max-width:1200px; margin:40px auto; padding:0 20px}
+    header{
+      display:flex; align-items:center; gap:14px; margin-bottom:18px;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background:linear-gradient(135deg, #0f0f0f, #1b1b1b);
+      border:1px solid #111; box-shadow: inset 0 1px 0 rgba(255,255,255,.04), var(--shadow-1);
+      display:grid; place-items:center; color:var(--accent);
+      font-weight:800; letter-spacing:.5px;
+    }
+    h1{font-size:20px; margin:0}
+    .sub{color:var(--ink-dim); font-size:13px}
+
+    .grid{
+      display:grid; grid-template-columns: 340px 1fr; gap:18px;
+    }
+
+    .panel{
+      background:linear-gradient(180deg, #0e0e0e, #0b0b0b);
+      border:1px solid #171717; border-radius:var(--radius);
+      box-shadow: var(--shadow-1);
+    }
+    .panel h2{
+      margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#bdbdbd;
+      padding:14px 16px; border-bottom:1px solid #161616;
+      background:linear-gradient(180deg, #121212, #0e0e0e);
+      border-top-left-radius:var(--radius); border-top-right-radius:var(--radius);
+    }
+    .panel .body{padding:14px}
+
+    .row{display:grid; gap:8px; margin-bottom:12px}
+    .row.inline{grid-template-columns: 1fr auto; align-items:center}
+    label{color:#cfcfcf; font-size:13px}
+    input[type="text"], input[type="number"], input[type="file"], select{
+      width:100%; background: #0f0f0f; color:var(--ink); border:1px solid #1a1a1a; border-radius:12px; padding:10px 12px; outline:none;
+    }
+    input[type="range"]{ width:100% }
+
+    .switch{ display:inline-grid; grid-template-columns: 36px auto; align-items:center; gap:10px; }
+    .toggle{ position:relative; width:42px; height:24px; background:#0f0f0f; border:1px solid #1a1a1a; border-radius:999px; cursor:pointer; box-shadow: inset 0 2px 6px rgba(0,0,0,.5)}
+    .dot{ position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:999px; background:#242424; transition:transform .2s ease, background .2s ease }
+    .toggle.active{ background:#0d1b1f; border-color:#0f2b30 }
+    .toggle.active .dot{ transform:translateX(18px); background:#12343b }
+
+    /* Canvas area */
+    .stage{ position:relative; display:grid; place-items:center; min-height:520px; overflow:hidden; border-radius:var(--radius);
+      background: radial-gradient(600px 400px at 20% -10%, #121212 0%, #0b0b0b 60%, #090909 100%);
+      border:1px solid #161616; box-shadow: var(--shadow-2);
+    }
+    canvas{ max-width:100%; height:auto; background:#000; border-radius:var(--radius);
+      box-shadow: inset 0 0 0 1px #161616;
+    }
+    .empty{ color:#8a8a8a; font-size:14px; text-align:center }
+
+    /* Iconic CTA with shade effect */
+    .cta{
+      display:inline-flex; align-items:center; gap:10px; padding:14px 16px; font-weight:700; letter-spacing:.3px;
+      border-radius:16px; background: linear-gradient(180deg, #0f0f0f, #0a0a0a);
+      color:#e9faff; border:1px solid #162024; position:relative; cursor:pointer; user-select:none;
+      box-shadow: 0 2px 0 #071317, 0 12px 36px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.03);
+      transition: transform .06s ease, box-shadow .2s ease;
+      overflow:hidden;
+    }
+    .cta::before{ /* subtle moving sheen */
+      content:""; position:absolute; inset:-200% -50%; background:linear-gradient(60deg, transparent, rgba(255,255,255,.06), transparent);
+      transform: translateX(-60%); transition: transform .6s ease;
+    }
+    .cta:hover::before{ transform: translateX(60%) }
+    .cta:hover{ box-shadow: 0 4px 0 #071317, 0 24px 60px rgba(0,0,0,.65), inset 0 0 0 1px rgba(255,255,255,.05) }
+    .cta:active{ transform: translateY(2px); box-shadow: 0 0px 0 #071317, 0 10px 28px rgba(0,0,0,.6) }
+
+    .btn-row{ display:flex; gap:10px; flex-wrap:wrap }
+    .chip{
+      padding:8px 12px; border-radius:999px; font-size:12px; color:#d8d8d8; background:#101010; border:1px solid #1a1a1a
+    }
+
+    .color-row{ display:flex; gap:10px; align-items:center }
+    .color-row input[type="color"]{ width:42px; height:36px; background:none; border:none; padding:0; border-radius:10px; overflow:hidden }
+
+    .footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:12px }
+    .hint{ color:#8e8e8e; font-size:12px }
+
+    .range-row{ display:grid; grid-template-columns: 100px 1fr 60px; gap:8px; align-items:center }
+    .range-row output{ text-align:right; color:#d6d6d6 }
+
+    .kbd{ font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#101010; border:1px solid #1a1a1a; padding:2px 6px; border-radius:6px; color:#c7c7c7 }
+    .note{ font-size:12px; color:#9aa0a6 }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">WM</div>
+      <div>
+        <h1>Watermark Studio</h1>
+        <div class="sub">© 2025 Gravy. Built with ❤️ by The 11 View.</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Controls -->
+      <section class="panel">
+        <h2>Controls</h2>
+        <div class="body">
+          <div class="row">
+            <label>Base Image</label>
+            <input id="baseFile" type="file" accept="image/*" />
+          </div>
+
+          <div class="row inline">
+            <label class="switch">
+              <div id="tileToggle" class="toggle"><div class="dot"></div></div>
+              <span>Tile Watermark</span>
+            </label>
+            <span class="chip" id="imgOrText">Text Mode</span>
+          </div>
+
+          <div class="row">
+            <label>Watermark Text</label>
+            <input id="wmText" type="text" value="© Your Brand" placeholder="Enter watermark text" />
+          </div>
+
+          <div class="row">
+            <label>or Watermark Image (PNG recommended for transparency)</label>
+            <input id="wmFile" type="file" accept="image/*" />
+          </div>
+
+          <div class="row">
+            <label>Font</label>
+            <select id="fontFamily">
+              <option value="Inter, system-ui, Arial, sans-serif">Inter / System</option>
+              <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+              <option value="Roboto, Arial, sans-serif">Roboto</option>
+              <option value="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Monospace</option>
+              <option value="Georgia, 'Times New Roman', serif">Georgia</option>
+            </select>
+          </div>
+
+          <div class="color-row row">
+            <div style="flex:1">
+              <label>Text Color</label>
+              <input id="fillColor" type="color" value="#ffffff" />
+            </div>
+            <div style="flex:1">
+              <label>Outline</label>
+              <input id="strokeColor" type="color" value="#000000" />
+            </div>
+          </div>
+
+          <div class="row range-row">
+            <label>Opacity</label>
+            <input id="opacity" type="range" min="0" max="100" value="28" />
+            <output id="outOpacity">28%</output>
+          </div>
+
+          <div class="row range-row">
+            <label>Size</label>
+            <input id="size" type="range" min="8" max="200" value="48" />
+            <output id="outSize">48px</output>
+          </div>
+
+          <div class="row range-row">
+            <label>Angle</label>
+            <input id="angle" type="range" min="-90" max="90" value="-30" />
+            <output id="outAngle">-30°</output>
+          </div>
+
+          <div class="row range-row" id="tileXRow">
+            <label>Tile X Gap</label>
+            <input id="gapX" type="range" min="0" max="600" value="180" />
+            <output id="outGapX">180px</output>
+          </div>
+          <div class="row range-row" id="tileYRow">
+            <label>Tile Y Gap</label>
+            <input id="gapY" type="range" min="0" max="600" value="140" />
+            <output id="outGapY">140px</output>
+          </div>
+
+          <div class="row range-row" id="posXRow">
+            <label>Position X</label>
+            <input id="posX" type="range" min="0" max="100" value="50" />
+            <output id="outPosX">50%</output>
+          </div>
+          <div class="row range-row" id="posYRow">
+            <label>Position Y</label>
+            <input id="posY" type="range" min="0" max="100" value="50" />
+            <output id="outPosY">50%</output>
+          </div>
+
+          <div class="btn-row">
+            <button id="download" class="cta" title="Download watermarked image">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download PNG
+            </button>
+            <span class="chip">Drag on the image to move watermark</span>
+          </div>
+
+          <div class="footer">
+            <span class="hint">Pro tip: Hold <span class="kbd">Shift</span> while dragging to lock axis. Double‑click stage to center.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Canvas / Preview -->
+      <section class="panel">
+        <h2>Preview</h2>
+        <div class="body">
+          <div class="stage" id="stage">
+            <canvas id="canvas" width="1200" height="800"></canvas>
+            <div class="empty" id="emptyMsg">Upload a base image to get started.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const $ = sel => document.querySelector(sel);
+    const baseFile = $('#baseFile');
+    const wmFile = $('#wmFile');
+    const wmText = $('#wmText');
+    const fontFamily = $('#fontFamily');
+    const fillColor = $('#fillColor');
+    const strokeColor = $('#strokeColor');
+    const opacity = $('#opacity');
+    const size = $('#size');
+    const angle = $('#angle');
+    const gapX = $('#gapX');
+    const gapY = $('#gapY');
+    const posX = $('#posX');
+    const posY = $('#posY');
+    const outOpacity = $('#outOpacity');
+    const outSize = $('#outSize');
+    const outAngle = $('#outAngle');
+    const outGapX = $('#outGapX');
+    const outGapY = $('#outGapY');
+    const outPosX = $('#outPosX');
+    const outPosY = $('#outPosY');
+    const tileToggle = $('#tileToggle');
+    const imgOrText = $('#imgOrText');
+
+    const canvas = $('#canvas');
+    const ctx = canvas.getContext('2d');
+    const stage = $('#stage');
+    const emptyMsg = $('#emptyMsg');
+    const downloadBtn = $('#download');
+
+    const state = {
+      base: null,            // HTMLImageElement
+      wmImg: null,           // HTMLImageElement
+      text: wmText.value,
+      font: fontFamily.value,
+      fill: fillColor.value,
+      stroke: strokeColor.value,
+      opacity: +opacity.value / 100,
+      size: +size.value,     // px
+      angle: +angle.value * Math.PI/180,
+      gapX: +gapX.value,
+      gapY: +gapY.value,
+      posXPercent: +posX.value, // 0..100 (genius ass nigga)
+      posYPercent: +posY.value, // 0..100
+      tile: false,
+      dragging: false,
+      dragStart: null,
+      dragOrigin: null
+    };
+
+    // Toggle UI helpers
+    const setTileUI = (on) => {
+      $('#tileXRow').style.display = on ? 'grid' : 'none';
+      $('#tileYRow').style.display = on ? 'grid' : 'none';
+      $('#posXRow').style.display = on ? 'none' : 'grid';
+      $('#posYRow').style.display = on ? 'none' : 'grid';
+    }
+    setTileUI(state.tile);
+
+    // Retina scaling for crisp exports
+    const fitCanvasToImage = (img)=>{
+      const maxW = stage.clientWidth - 20; // padding
+      const maxH = Math.max(420, stage.clientHeight - 20);
+      const ratio = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
+      const displayW = Math.round(img.naturalWidth * ratio);
+      const displayH = Math.round(img.naturalHeight * ratio);
+
+      // Backing store at 2x for crispness
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.style.width = displayW + 'px';
+      canvas.style.height = displayH + 'px';
+      canvas.width = Math.round(displayW * dpr);
+      canvas.height = Math.round(displayH * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    const loadImageFromFile = (file)=> new Promise((res, rej)=>{
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = ()=>{ URL.revokeObjectURL(url); res(img) };
+      img.onerror = rej;
+      img.src = url;
+    });
+
+    const draw = ()=>{
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(!state.base){ return; }
+
+      // draw base image fitting current canvas CSS size
+      ctx.drawImage(state.base, 0, 0, canvas.width/ (window.devicePixelRatio||1), canvas.height/ (window.devicePixelRatio||1));
+
+      ctx.save();
+      ctx.globalAlpha = state.opacity;
+
+      if(state.tile){
+        drawTiledWatermark();
+      } else {
+        drawSingleWatermark();
+      }
+
+      ctx.restore();
+    }
+
+    const measureWM = ()=>{
+      if(state.wmImg){
+        const scale = state.size / (state.wmImg.naturalHeight || state.size);
+        return { w: state.wmImg.naturalWidth * scale, h: state.wmImg.naturalHeight * scale };
+      } else {
+        ctx.font = `600 ${state.size}px ${state.font}`;
+        const metrics = ctx.measureText(state.text || ' ');
+        const h = state.size; // approximate line box height
+        return { w: metrics.width, h };
+      }
+    }
+
+    const drawSingleWatermark = ()=>{
+      const { w, h } = measureWM();
+      const x = (canvas.width/(window.devicePixelRatio||1)) * (state.posXPercent/100) - w/2;
+      const y = (canvas.height/(window.devicePixelRatio||1)) * (state.posYPercent/100) - h/2;
+
+      ctx.translate(x + w/2, y + h/2);
+      ctx.rotate(state.angle);
+      ctx.translate(-(x + w/2), -(y + h/2));
+
+      renderWM(x, y, w, h);
+    }
+
+    const drawTiledWatermark = ()=>{
+      const { w, h } = measureWM();
+      const stepX = Math.max(40, w + state.gapX);
+      const stepY = Math.max(40, h + state.gapY);
+      const cw = canvas.width/(window.devicePixelRatio||1);
+      const ch = canvas.height/(window.devicePixelRatio||1);
+
+      // rotate entire tiling context around center
+      ctx.translate(cw/2, ch/2);
+      ctx.rotate(state.angle);
+      ctx.translate(-cw/2, -ch/2);
+
+      // tile across extended bounds to fill after rotation
+      for(let y=-stepY; y<ch+stepY; y+=stepY){
+        for(let x=-stepX; x<cw+stepX; x+=stepX){
+          renderWM(x, y, w, h);
+        }
+      }
+    }
+
+    const renderWM = (x, y, w, h)=>{
+      if(state.wmImg){
+        ctx.drawImage(state.wmImg, x, y, w, h);
+      } else {
+        ctx.font = `700 ${state.size}px ${state.font}`;
+        ctx.textBaseline = 'top';
+        // outline for contrast
+        if(state.stroke && state.stroke !== 'transparent'){
+          ctx.strokeStyle = state.stroke;
+          ctx.lineWidth = Math.max(1, Math.floor(state.size/18));
+          ctx.strokeText(state.text, x, y);
+        }
+        ctx.fillStyle = state.fill;
+        ctx.fillText(state.text, x, y);
+      }
+    }
+
+    // --- Event wiring ---
+    baseFile.addEventListener('change', async (e)=>{
+      const f = e.target.files?.[0];
+      if(!f) return;
+      try{
+        state.base = await loadImageFromFile(f);
+        fitCanvasToImage(state.base);
+        emptyMsg.style.display = 'none';
+        draw();
+      }catch(err){ alert('Could not load base image.'); }
+    });
+
+    wmFile.addEventListener('change', async (e)=>{
+      const f = e.target.files?.[0];
+      if(!f){ state.wmImg = null; imgOrText.textContent = 'Text Mode'; draw(); return; }
+      try{
+        state.wmImg = await loadImageFromFile(f);
+        imgOrText.textContent = 'Image Mode';
+        draw();
+      }catch(err){ alert('Could not load watermark image.'); }
+    });
+
+    wmText.addEventListener('input', (e)=>{ state.text = e.target.value; draw(); });
+    fontFamily.addEventListener('change', (e)=>{ state.font = e.target.value; draw(); });
+    fillColor.addEventListener('input', (e)=>{ state.fill = e.target.value; draw(); });
+    strokeColor.addEventListener('input', (e)=>{ state.stroke = e.target.value; draw(); });
+
+    opacity.addEventListener('input', (e)=>{ state.opacity = +e.target.value / 100; outOpacity.textContent = e.target.value + '%'; draw(); });
+    size.addEventListener('input', (e)=>{ state.size = +e.target.value; outSize.textContent = e.target.value + 'px'; draw(); });
+    angle.addEventListener('input', (e)=>{ state.angle = +e.target.value * Math.PI/180; outAngle.textContent = e.target.value + '°'; draw(); });
+
+    gapX.addEventListener('input', (e)=>{ state.gapX = +e.target.value; outGapX.textContent = e.target.value + 'px'; draw(); });
+    gapY.addEventListener('input', (e)=>{ state.gapY = +e.target.value; outGapY.textContent = e.target.value + 'px'; draw(); });
+
+    posX.addEventListener('input', (e)=>{ state.posXPercent = +e.target.value; outPosX.textContent = e.target.value + '%'; draw(); });
+    posY.addEventListener('input', (e)=>{ state.posYPercent = +e.target.value; outPosY.textContent = e.target.value + '%'; draw(); });
+
+    tileToggle.addEventListener('click', ()=>{
+      state.tile = !state.tile;
+      tileToggle.classList.toggle('active', state.tile);
+      setTileUI(state.tile);
+      draw();
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(!state.base){ alert('Upload a base image first.'); return; }
+      // Re-render at full preview resolution already set on canvas
+      draw();
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url; a.download = 'watermarked.png'; a.click();
+    });
+
+    // Drag to move single watermark
+    let shiftLock = false;
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Shift') shiftLock = true; });
+    document.addEventListener('keyup', (e)=>{ if(e.key==='Shift') shiftLock = false; });
+
+    const stageToCanvasCoords = (clientX, clientY)=>{
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const x = (clientX - rect.left) * (canvas.width/dpr / rect.width);
+      const y = (clientY - rect.top) * (canvas.height/dpr / rect.height);
+      return {x,y};
+    }
+
+    stage.addEventListener('mousedown', (e)=>{
+      if(state.tile || !state.base) return; // drag only in single mode
+      state.dragging = true;
+      state.dragStart = stageToCanvasCoords(e.clientX, e.clientY);
+      state.dragOrigin = { xPercent: state.posXPercent, yPercent: state.posYPercent };
+    });
+    window.addEventListener('mousemove', (e)=>{
+      if(!state.dragging) return;
+      const p = stageToCanvasCoords(e.clientX, e.clientY);
+      const dx = p.x - state.dragStart.x;
+      const dy = p.y - state.dragStart.y;
+      const cw = canvas.width/(window.devicePixelRatio||1);
+      const ch = canvas.height/(window.devicePixelRatio||1);
+      let nx = state.dragOrigin.xPercent + (dx / cw)*100;
+      let ny = state.dragOrigin.yPercent + (dy / ch)*100;
+      if(shiftLock){ if(Math.abs(dx) > Math.abs(dy)) ny = state.dragOrigin.yPercent; else nx = state.dragOrigin.xPercent; }
+      state.posXPercent = Math.min(100, Math.max(0, nx));
+      state.posYPercent = Math.min(100, Math.max(0, ny));
+      posX.value = state.posXPercent; posY.value = state.posYPercent;
+      outPosX.textContent = Math.round(state.posXPercent)+ '%';
+      outPosY.textContent = Math.round(state.posYPercent)+ '%';
+      draw();
+    });
+    window.addEventListener('mouseup', ()=>{ state.dragging = false; });
+
+    // Double click to center
+    stage.addEventListener('dblclick', ()=>{
+      if(state.tile) return;
+      state.posXPercent = 50; state.posYPercent = 50;
+      posX.value = 50; posY.value = 50; outPosX.textContent = '50%'; outPosY.textContent = '50%';
+      draw();
+    });
+
+    // Init outputs
+    outOpacity.textContent = opacity.value + '%';
+    outSize.textContent = size.value + 'px';
+    outAngle.textContent = angle.value + '°';
+    outGapX.textContent = gapX.value + 'px';
+    outGapY.textContent = gapY.value + 'px';
+    outPosX.textContent = posX.value + '%';
+    outPosY.textContent = posY.value + '%';
+  </script>
+</body>
+</html>
