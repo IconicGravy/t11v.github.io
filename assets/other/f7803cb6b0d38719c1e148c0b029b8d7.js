@@ -1,7 +1,7 @@
 // Ignore the horrid code :sob:
 const targetLinks = {
     link1: "https://discordapp.com/users/1211838285887053885",
-    link2: "https://www.tiktok.com/@trapbandito",
+    link2: "https://www.tiktok.com/@hallowinsides?_t=ZG-8zI9yRKXZHV&_r=1",
     link3: "https://www.roblox.com/users/718019838/profile",
     link4: "https://onlyfans.com/trapbandito"
 };
@@ -14,4 +14,5 @@ const linkEl = document.getElementById(id);
         event.preventDefault(); // prevent default anchor behavior
         window.open(targetLinks[id], "_blank"); // redirect
     });
+
 });
