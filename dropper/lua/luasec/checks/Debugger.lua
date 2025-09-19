@@ -1,5 +1,5 @@
 --[[
-    The 11 View
+                                                                                The 11 View
 LuaSec V11's super sexy anti debugging Utility
 Deleted stuff:
   1) API endpoints
