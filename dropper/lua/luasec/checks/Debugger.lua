@@ -1,12 +1,10 @@
 --[[
                                               The 11 View
-LuaSec V11's super sexy anti debugging Utility
+LuaSec V11's anti debugging Utility
 Deleted stuff:
   1) API endpoints
-  2) cli relations (to make it standalone)
+  2) clinet relations (to make it standalone)
   3) V12 Addons 
-No you cannot skid those saddly
-Code is super duper organized and nice and V12 already rewrote the whole thing so lets leak it :P ?
 Features:
   1) Function Protection 
   2) Silent Operation 
@@ -25,7 +23,7 @@ More features but these are the most important
 
 This is not the version used in the V12 please note that the current version of LuaSec is V12.4 (That doesn't mean this is outdated)
 
-Contact me @p2w8 on discord
+Contact me @p2w8 on discord (for questions)
 ]]
 
 -- Handler for environments without warn function
@@ -309,22 +307,21 @@ function LuaSec:handleDetection()
     local method = self.responseMethods[self.currentMethod]
     
     if method == "kick" then
-        -- Kicks the nigger (if in roblox client)
+        -- Kicks the player (if in roblox client)
         if game and game.Players and game.Players.LocalPlayer then
             game.Players.LocalPlayer:Kick("Security violation detected")
         end
-        -- Super duper optimized mode (For Roblox studio)
+        -- Super optimized mode (For Roblox studio)
     elseif method == "degrade" then
         debug = nil
         collectgarbage("count")
     else
-        -- Bloats the script with empty loop :P
+        -- Bloats the script with loop :P
         Spawn(function()
             -- Ensure wait exists before using it
             if wait then
                 wait(math.random(1, 5))
-            else
-                -- Fallback for environments without wait (e.g Lua Compilers)
+            else -- For environments without wait (e.g Lua Compilers)
                 local start = os.clock()
                 while os.clock() - start < math.random(1, 5) do end
             end
