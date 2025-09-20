@@ -24,6 +24,17 @@ More features but these are the most important
 This is not the version used in the V12 please note that the current version of LuaSec is V12.4 (That doesn't mean this is outdated)
 
 Contact me @p2w8 on discord (for questions)
+
+⚠️Warning:
+If you're thinking about using this, do these two things or just don't bother:
+
+1) Rename everything
+Variables, functions, whatever. Obfuscators sometimes do their own renaming depending on the VM, but some of the obfuscators encode names using XOR or arithmetic and then decode them at runtime. Anyone with memory access (executors) can read the original names directly.
+
+2) Obfuscate your version
+This module is open source. That means anyone can see the security checks. Attackers / Exploiters will either hook everything or just bypass it without triggering any checks.
+
+In simple words: rename it, obfuscate it, and please don't be the guy who leaves the door open for attackers / exploiters and then blame the security.
 ]]
 
 -- Handler for environments without warn function
