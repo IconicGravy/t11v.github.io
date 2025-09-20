@@ -25,7 +25,7 @@ This is not the version used in the V12 please note that the current version of 
 
 Contact me @p2w8 on discord (for questions)
 
-⚠️Warning:
+Warning:
 If you're thinking about using this, do these two things or just don't bother:
 
 1) Rename everything
