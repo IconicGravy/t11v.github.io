@@ -1,5 +1,5 @@
 --[[
-                                              The 11 View
+                                                                                                          The 11 View
 LuaSec V11's anti debugging Utility
 Deleted stuff:
   1) API endpoints
@@ -52,7 +52,7 @@ local LuaSec = {
     running = false,
     original = {},
     protected = {},
-    protectedCount = 0, -- Add explicit counter for protected functions (as data to be reused)
+    protectedCount = 0,
     suspiciousCount = 0,
     lastCheckTime = 0,
     lastCheckResult = false,
@@ -70,7 +70,6 @@ local function Spawn(f)
         local co = coroutine.wrap(f)
         co()
     else
-        -- Execute immediately (might block)
         f()
     end
 end
@@ -118,7 +117,7 @@ local function performStackCheck()
         if info.source and (
             info.source:lower():find("debug") or
             info.source:lower():find("hook") or
-            info.source:lower():find("inspect") or -- Vanilla lua version of debugging
+            info.source:lower():find("inspect") or
             info.source:lower():find("trace") or
             info.source:lower():find("monitor")
         ) then
@@ -157,7 +156,6 @@ local function checkDebugActivity()
 end
 
 local function debugHook()
-    -- Check for debug activity in the process
     if checkDebugActivity() then
         LuaSec.suspiciousCount = LuaSec.suspiciousCount + 1
         if LuaSec.suspiciousCount >= 3 then
@@ -165,7 +163,6 @@ local function debugHook()
         end
     end
     
-    -- If debug functions are read-only, check if they're being called directly
     if LuaSec.debugFunctionsReadOnly then
         local caller = LuaSec.original.debugGetInfo and LuaSec.original.debugGetInfo(2, "f")
         if caller and (
@@ -190,7 +187,6 @@ function LuaSec:start()
         self.original.debugSetUpvalue = debug.setupvalue
     end
     
-    -- Try to replace debug functions with pcall to handle read-only tables (It is bad for the memory)
     local success, err = pcall(function()
         if debug then
             debug.info = function(...)
@@ -286,9 +282,7 @@ function LuaSec:start()
 end
 
 function LuaSec:checkSystem()
-    -- Remove references to undefined fields
     if debug then
-        -- Check if debug functions are still our replacements
         local testFunc = function() return 42 end
         local testInfo = debug.getinfo(testFunc)
         if not testInfo or testInfo.name ~= "testFunc" then
