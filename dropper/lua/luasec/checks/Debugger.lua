@@ -1,5 +1,5 @@
 --[[
-                                                                                                          The 11 View
+                                                                The 11 View
 LuaSec V11's anti debugging Utility
 Deleted stuff:
   1) API endpoints
@@ -11,14 +11,6 @@ Features:
   3) Automatic Setup 
   4) Debug Function Replacement 
   5) Anti-Stack Inspection 
-  6) Hook Detection 
-  7) Silent Blocking 
-  8) Zero Configuration 
-  9) Lightweight 
-  10) Universal Compatibility 
-  11) Function Identity Protection 
-  12) Runtime Monitoring 
-  13) No Dependencies 
 More features but these are the most important
 
 This is not the version used in the V12 please note that the current version of LuaSec is V12.4 (That doesn't mean this is outdated)
@@ -33,8 +25,6 @@ Variables, functions, whatever. Obfuscators sometimes do their own renaming depe
 
 2) Obfuscate your version
 This module is open source. That means anyone can see the security checks. Attackers / Exploiters will either hook everything or just bypass it without triggering any checks.
-
-In simple words: rename it, obfuscate it, and please don't be the guy who leaves the door open for attackers / exploiters and then blame the security.
 ]]
 
 -- Handler for environments without warn function
@@ -59,7 +49,7 @@ local LuaSec = {
     responseMethods = {"kick", "degrade", "delay"},
     currentMethod = 1,
     status = "Initialized",
-    debugFunctionsReadOnly = false
+    isReadOnly = false
 }
 
 -- Utility if the running env doesn't have spawn (e.g Lua Compilers)
@@ -74,35 +64,36 @@ local function Spawn(f)
     end
 end
 
-local function makeFakeInfo(what)
-    local names = {"update", "render", "process", "handle", "callback", "refresh", "load"} -- Fake response names
-    local sources = {"Player", "Replicated", "Starter", "Server", "Storage", "Scripts"} -- Fake globals
+local function genFakeInfo(what)
+    local fake = {}
     
-    local replace = {}
+    local verbs = {"update", "render", "process", "handle", "refresh"}
+    local objects = {"Player", "Server", "Script", "Module", "Event"}
     
     if what:find("n") then
-        replace.name = names[math.random(1, #names)] .. "_" .. math.random(100, 999)
+        local verb = verbs[math.random(#verbs)]
+        local obj = objects[math.random(#objects)]
+        fake.name = verb .. "_" .. obj .. "_" .. tostring(math.random(10, 99))
     end
-    -- API Related
+    
     if what:find("S") then
-        -- Normally this should reply with the raw version of the script (If the owner is willing to use luasec's API for hosting)
-        -- Endpoint: /api/scripts/:scriptId/raw 
-        replace.source = sources[math.random(1, #sources)] .. "/Script_" .. math.random(10, 99) .. ".lua"
+        fake.source = "src/" .. objects[math.random(#objects)] .. tostring(math.random(1, 50)) .. ".lua"
     end
     
     if what:find("l") then
-        replace.currentline = math.random(5, 200)
+        fake.currentline = math.random(20, 120)
     end
     
     if what:find("L") then
-        replace.activelines = {}
-        for i = 1, math.random(3, 5) do
-            replace.activelines[i] = math.random(5, 200)
+        fake.activelines = {}
+        for i = 1, math.random(2, 4) do
+            table.insert(fake.activelines, math.random(20, 120))
         end
     end
     
-    return replace
+    return fake
 end
+
 
 local function performStackCheck()
     local depth = 0
@@ -163,7 +154,7 @@ local function debugHook()
         end
     end
     
-    if LuaSec.debugFunctionsReadOnly then
+    if LuaSec.isReadOnly then
         local caller = LuaSec.original.debugGetInfo and LuaSec.original.debugGetInfo(2, "f")
         if caller and (
             caller.func == LuaSec.original.debugInfo or 
@@ -196,7 +187,7 @@ function LuaSec:start()
                 
                 local args = {...}
                 local what = args[2] or "n"
-                return makeFakeInfo(what)
+                return genFakeInfo(what)
             end
             
             debug.getinfo = function(func, what)
@@ -204,7 +195,7 @@ function LuaSec:start()
                 for name, data in pairs(self.protected) do
                     if func == data.safe then
                         -- Return fake info
-                        return makeFakeInfo(what or "f")
+                        return genFakeInfo(what or "f")
                     end
                 end
                 
@@ -250,7 +241,7 @@ function LuaSec:start()
     
     -- If it can't replace the debug functions, it will rely on the hook for detection
     if not success then
-        self.debugFunctionsReadOnly = true
+        self.isReadOnly = true
         self.status = "Debug functions read-only, using hook detection"
     else
         self.status = "Debug functions replaced"
@@ -321,7 +312,7 @@ function LuaSec:handleDetection()
         debug = nil
         collectgarbage("count")
     else
-        -- Bloats the script with loop :P
+        -- Bloats the script with loop
         Spawn(function()
             -- Ensure wait exists before using it
             if wait then
