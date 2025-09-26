@@ -1,0 +1,27 @@
+/* ======================================================
+   @The11View Utility
+   File: profile.css
+   Hash: #3c91e6
+   ====================================================== */
+
+.profile-card {
+  width: 280px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover { transform: translateY(-5px); }
+
+.profile-avatar {
+  width:80px; height:80px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  margin-bottom:12px;
+}
+
+.profile-name { font-size:1.2rem; font-weight:700; }
+.profile-role { font-size:0.9rem; color: var(--text-secondary); }
