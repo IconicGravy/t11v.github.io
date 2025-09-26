@@ -1,0 +1,29 @@
+/* ======================================================
+   @The11View Utility
+   File: server-join.css
+   Hash: #67b3c4
+   ====================================================== */
+
+.server-join {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background: var(--bg-card);
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  margin:4px 0;
+  transition: all 0.3s ease;
+}
+
+.server-join:hover { border-color: var(--accent-hover); }
+
+.server-join img {
+  width:40px; height:40px;
+  border-radius:6px;
+}
+
+.server-join .server-name {
+  font-weight:600;
+  color: var(--text-primary);
+}
