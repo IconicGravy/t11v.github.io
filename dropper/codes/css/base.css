@@ -1,0 +1,21 @@
+/* ======================================================
+   @The11View Utility
+   File: base.css
+   Hash: #4e7b22
+   ====================================================== */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  transition: background 0.5s ease;
+}
