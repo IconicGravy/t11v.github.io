@@ -1,0 +1,34 @@
+/* ======================================================
+   @The11View Utility
+   File: views-badges.css
+   Hash: #a7d92f
+   ====================================================== */
+
+.view-counter {
+  display:flex;
+  align-items:center;
+  font-size:1rem;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border:1px solid var(--border);
+  border-radius: 8px;
+  padding:4px 8px;
+  margin:2px;
+  transition: all 0.3s ease;
+}
+
+.view-counter:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-hover);
+}
+
+.badge {
+  display:inline-block;
+  font-size:0.8rem;
+  padding:2px 6px;
+  border-radius:4px;
+  background: var(--accent);
+  color: white;
+  margin-left:5px;
+  font-weight:600;
+}
