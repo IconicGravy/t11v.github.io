@@ -1,0 +1,89 @@
+/* ======================================================
+   @The11View Utility
+   File: backgrounds.css
+   Hash: #e0f741
+   ====================================================== */
+
+.background-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.snow {
+  position: absolute;
+  top: -10px;
+  background: white;
+  border-radius: 50%;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+  animation-name: snowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  box-shadow: 0 0 5px rgba(255,255,255,0.3);
+}
+
+@keyframes snowfall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+
+.aurora-bg {
+  position: absolute; top:0; left:0;
+  width:100%; height:100%;
+  background: linear-gradient(to bottom, #000428, #004e92);
+  overflow:hidden;
+}
+
+.aurora {
+  position:absolute;
+  width:200%; height:200%;
+  background: radial-gradient(ellipse at center, rgba(0,255,255,0.1) 0%, transparent 70%);
+  animation: aurora-move 20s ease-in-out infinite;
+}
+
+.aurora:nth-child(2) {
+  background: radial-gradient(ellipse at center, rgba(255,0,255,0.1) 0%, transparent 70%);
+  animation-delay: -5s;
+}
+
+.aurora:nth-child(3) {
+  background: radial-gradient(ellipse at center, rgba(0,255,0,0.1) 0%, transparent 70%);
+  animation-delay: -10s;
+}
+
+@keyframes aurora-move {
+  0%,100% { transform: translate(-50%, -50%) rotate(0deg); }
+  33% { transform: translate(-30%, -70%) rotate(120deg); }
+  66% { transform: translate(-70%, -30%) rotate(240deg); }
+}
+
+.nebula-bg {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+}
+
+.nebula-cloud {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:0.6;
+  animation: nebula-float 30s ease-in-out infinite;
+}
+
+@keyframes nebula-float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(30px,-30px) scale(1.1); }
+}
+
+.geometric-bg { position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); }
+.geometric-shape { position:absolute; border:2px solid rgba(255,255,255,0.1); animation: geometric-rotate 20s linear infinite; }
+@keyframes geometric-rotate { to { transform: rotate(360deg); } }
+
+.galaxy-bg { position:absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(ellipse at center,#1b2735 0%,#090a0f 100%); }
+.star { position:absolute; background:white; border-radius:50%; animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 0%,100%{opacity:0.3;transform:scale(1);} 50%{opacity:1;transform:scale(1.2);} }
