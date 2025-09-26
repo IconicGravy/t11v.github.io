@@ -1,0 +1,39 @@
+/* ======================================================
+   @The11View Utility
+   File: notification-loading.css
+   Hash: #e8537c
+   ====================================================== */
+
+.notification {
+  position:fixed;
+  top:20px; right:20px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding:12px 20px;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+  opacity:0;
+  pointer-events:none;
+  transform: translateY(-20px);
+  transition: all 0.4s ease;
+  z-index:1000;
+}
+
+.notification.show {
+  opacity:1;
+  pointer-events:auto;
+  transform: translateY(0);
+}
+
+.notification.loading::after {
+  content:"";
+  display:inline-block;
+  margin-left:8px;
+  width:10px; height:10px;
+  border:2px solid var(--accent);
+  border-top-color:transparent;
+  border-radius:50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
