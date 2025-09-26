@@ -1,0 +1,30 @@
+/* ======================================================
+   @The11View Utility
+   File: activity-music.css
+   Hash: #d14ca1
+   ====================================================== */
+
+.music-activity {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  padding:6px 12px;
+  font-size:0.9rem;
+  color: var(--text-primary);
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.music-activity img {
+  width:32px; height:32px;
+  border-radius:4px;
+}
+
+.music-activity .song-info {
+  display:flex;
+  flex-direction:column;
+}
+
+.music-activity .song-title { font-weight:600; }
+.music-activity .song-artist { font-size:0.8rem; color: var(--text-secondary); }
