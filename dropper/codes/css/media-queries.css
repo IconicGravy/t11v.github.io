@@ -1,0 +1,21 @@
+/* ======================================================
+   @The11View Utility
+   File: media-queries.css
+   Hash: #2fa87e
+   ====================================================== */
+
+@media (max-width:1024px) {
+  .profile-card { width:220px; padding:12px; }
+  .view-counter { font-size:0.9rem; padding:3px 6px; }
+}
+
+@media (max-width:768px) {
+  .theme-switcher { flex-direction:row; bottom:10px; top:auto; }
+  .theme-button { width:30px; height:30px; }
+}
+
+@media (max-width:480px) {
+  .profile-card { width:180px; padding:10px; }
+  .music-activity { font-size:0.8rem; }
+  .server-join { font-size:0.8rem; padding:6px 10px; }
+}
