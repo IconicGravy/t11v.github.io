@@ -1,4 +1,4 @@
-# This prases and finds luau code in inputted files and make it support vanilla lua
+# This parses and finds luau code in inputted files and make it support vanilla lua
 import re
 import os
 
